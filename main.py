@@ -25,7 +25,7 @@ def create():
 		qrcode_svg(data.get(), filename.get())
 
 root = Tk()
-root.geometry("300x200")
+root.geometry("320x200")
 root.title("QR Code App")
 
 OPTIONS = ['select', 'png', 'svg']

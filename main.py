@@ -1,6 +1,8 @@
-from tkinter import *
+import PySimpleGUI as sg
 import qrcode
 import qrcode.image.svg
+
+sg.theme('BluePurple')
 
 def qrcode_png(data, filename):
 	qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=20, border=2)
@@ -16,42 +18,32 @@ def qrcode_svg(data, filename):
 	svg_img.save(f"{filename}.svg")
 
 def create():
-	if data.get() == "" or filename.get() == "" or option.get() == OPTIONS[0]:
+	data = values['-DATA-']
+	filename = values['-FILENAME-']
+	filetype = values['-FILETYPE-']
+	print(data, filename, filetype)
+	if data == "" or filename == "" or filetype not in options:
 		return
-	filetype = option.get()
+
 	if filetype == 'png':
-		qrcode_png(data.get(), filename.get())
+		qrcode_png(data, filename)
 	else:
-		qrcode_svg(data.get(), filename.get())
+		qrcode_svg(data, filename)
 
-root = Tk()
-root.geometry("320x200")
-root.title("QR Code App")
+options = ['svg', 'png']
 
-OPTIONS = ['select', 'png', 'svg']
+layout = [[sg.Text('Choose filetype:'), sg.Combo(options, default_value='select', key='-FILETYPE-', size=(10, 1))],
+	[sg.Text('Your data:'), sg.Input(key='-DATA-')],
+	[sg.Text('Name of file'), sg.Input(key='-FILENAME-')],
+	[sg.Button('Create QR Code')]]
 
-option = StringVar()
-option.set(OPTIONS[0])
+window = sg.Window('QR Code App', layout)
 
-filetype_label = Label(root, text = "Choose filetype:")
-filetype_label.grid(row = 0, column = 0)
+while True:
+	event, values = window.read()
+	if event in (None, 'Exit'):
+		break
+	if event == 'Create QR Code':
+		create()
 
-option_menu = OptionMenu(root, option, *OPTIONS)
-option_menu.grid(row = 0, column = 1, pady = 10)
-
-data_label = Label(root, text = "Your data:")
-data_label.grid(row = 1, column = 0)
-
-data = Entry(root)
-data.grid(row = 1, column = 1, pady = 10, ipadx = 15, ipady = 3)
-
-filename_label = Label(root, text = "Name of File:")
-filename_label.grid(row = 2, column = 0)
-
-filename = Entry(root)
-filename.grid(row = 2, column = 1, ipadx = 15, ipady = 3)
-
-create = Button(root, text = "Create QR Code", command = create)
-create.grid(columnspan = 2, pady = 12)
-
-root.mainloop()
+window.close()

@@ -1,1 +1,4 @@
-qrc
+qrc/
+env/
+*.png
+*.svg

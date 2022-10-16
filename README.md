@@ -2,7 +2,7 @@
 Create QR Code with Python
 
 ### Description
-* Simple Tkinter App
+* Now a PySimpleGUI App ~~Simple Tkinter App~~
 * Generate QR Codes with custom data
 
 ### How to use
